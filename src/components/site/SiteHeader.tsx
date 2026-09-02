@@ -36,10 +36,12 @@ export function SiteHeader() {
               <Plus className="h-5 w-5" strokeWidth={3} />
             </span>
             <span className="min-w-0 leading-tight">
-              <span className="block truncate text-sm font-semibold tracking-tight">
+              <span className={`block truncate text-sm font-semibold tracking-tight ${scrolled ? "" : "text-primary-foreground"}`}>
                 LIFEWELL MEDICAL
               </span>
-              <span className="block truncate text-xs text-muted-foreground">CENTER ATHENS</span>
+              <span className={`block truncate text-xs ${scrolled ? "text-muted-foreground" : "text-primary-foreground/70"}`}>
+                CENTER ATHENS
+              </span>
             </span>
           </a>
 
@@ -48,7 +50,7 @@ export function SiteHeader() {
               <a
                 key={l.label}
                 href={l.href}
-                className="rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                className={`rounded-full px-3 py-2 text-sm transition-colors ${scrolled ? "text-muted-foreground hover:bg-accent hover:text-accent-foreground" : "text-primary-foreground/85 hover:bg-primary-foreground/15 hover:text-primary-foreground"}`}
               >
                 {l.label}
               </a>
