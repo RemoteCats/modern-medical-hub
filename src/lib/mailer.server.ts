@@ -21,22 +21,12 @@ export function getStaffInbox(): string | undefined {
 }
 
 export async function sendMail(input: MailInput): Promise<MailResult> {
-  try {
-    const { sendTransactionalEmail } = (await import("./email/send.server").catch(
-      () => ({ sendTransactionalEmail: undefined }) as never,
-    )) as { sendTransactionalEmail?: (i: MailInput) => Promise<unknown> };
-
-    if (!sendTransactionalEmail) {
-      console.warn(`[mail] delivery not configured yet — would send "${input.subject}" to ${input.to}`);
-      return { sent: false, skipped: true };
-    }
-
-    await sendTransactionalEmail(input);
-    return { sent: true };
-  } catch (error) {
-    console.error("[mail] send failed", error);
-    return { sent: false, error: error instanceof Error ? error.message : "unknown error" };
-  }
+  // TODO: replaced with the generated transactional-email send helper once the
+  // project's sending domain is verified.
+  console.warn(
+    `[mail] delivery not configured yet — would send "${input.subject}" to ${input.to}`,
+  );
+  return { sent: false, skipped: true };
 }
 
 export function escapeHtml(value: string): string {
