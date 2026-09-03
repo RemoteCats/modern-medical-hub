@@ -2,9 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 
-async function assertStaff(supabase: {
-  rpc: (fn: "has_role", args: { _user_id: string; _role: "admin" | "staff" | "user" }) => Promise<{ data: unknown }>;
-}, userId: string) {
+type StaffCheckClient = {
+  rpc: (
+    fn: "has_role",
+    args: { _user_id: string; _role: "admin" | "staff" | "user" },
+  ) => PromiseLike<{ data: unknown }>;
+};
+
+async function assertStaff(supabase: StaffCheckClient, userId: string) {
   const [{ data: isAdmin }, { data: isStaff }] = await Promise.all([
     supabase.rpc("has_role", { _user_id: userId, _role: "admin" }),
     supabase.rpc("has_role", { _user_id: userId, _role: "staff" }),
