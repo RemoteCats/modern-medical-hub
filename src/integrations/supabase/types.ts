@@ -14,16 +14,183 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          notes: string | null
+          patient_name: string
+          phone: string
+          preferred_date: string
+          preferred_time: string
+          service: string
+          status: Database["public"]["Enums"]["booking_status"]
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          notes?: string | null
+          patient_name: string
+          phone: string
+          preferred_date: string
+          preferred_time: string
+          service: string
+          status?: Database["public"]["Enums"]["booking_status"]
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          notes?: string | null
+          patient_name?: string
+          phone?: string
+          preferred_date?: string
+          preferred_time?: string
+          service?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+        }
+        Relationships: []
+      }
+      conversation_messages: {
+        Row: {
+          author_id: string | null
+          body: string
+          conversation_id: string
+          created_at: string
+          email_sent: boolean
+          id: string
+          sender: Database["public"]["Enums"]["message_sender"]
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          conversation_id: string
+          created_at?: string
+          email_sent?: boolean
+          id?: string
+          sender: Database["public"]["Enums"]["message_sender"]
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          email_sent?: boolean
+          id?: string
+          sender?: Database["public"]["Enums"]["message_sender"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          access_token: string
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["conversation_kind"]
+          last_message_at: string
+          status: Database["public"]["Enums"]["conversation_status"]
+          subject: string
+          visitor_email: string
+          visitor_name: string
+          visitor_phone: string | null
+        }
+        Insert: {
+          access_token?: string
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["conversation_kind"]
+          last_message_at?: string
+          status?: Database["public"]["Enums"]["conversation_status"]
+          subject?: string
+          visitor_email: string
+          visitor_name: string
+          visitor_phone?: string | null
+        }
+        Update: {
+          access_token?: string
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["conversation_kind"]
+          last_message_at?: string
+          status?: Database["public"]["Enums"]["conversation_status"]
+          subject?: string
+          visitor_email?: string
+          visitor_name?: string
+          visitor_phone?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "staff" | "user"
+      booking_status: "new" | "confirmed" | "cancelled" | "completed"
+      conversation_kind: "contact" | "chat"
+      conversation_status: "open" | "pending" | "closed"
+      message_sender: "visitor" | "staff"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +317,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "staff", "user"],
+      booking_status: ["new", "confirmed", "cancelled", "completed"],
+      conversation_kind: ["contact", "chat"],
+      conversation_status: ["open", "pending", "closed"],
+      message_sender: ["visitor", "staff"],
+    },
   },
 } as const
